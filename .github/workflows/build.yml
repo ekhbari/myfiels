@@ -2,8 +2,8 @@ name: Build APK with Buildozer
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
@@ -11,12 +11,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up dependencies
         run: |
           sudo apt update
-          sudo apt install -y build-essential git zip unzip openjdk-17-jdk python3-pip libncurses5
+          sudo apt install -y build-essential zip unzip openjdk-17-jdk python3-pip libncurses5-dev
           pip3 install --upgrade pip
           pip3 install --user cython buildozer
 
@@ -29,5 +29,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: notesapp-apk
+          name: myapp-debug-apk
           path: bin/*.apk
