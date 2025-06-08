@@ -8,22 +8,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: kivy/buildozer:latest  # ← حل المشكلة هنا
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install extra dependencies
+      - name: Set up dependencies
         run: |
-          apt-get update
-          apt-get install -y zip openjdk-17-jdk
+          sudo apt update
+          sudo apt install -y build-essential git zip unzip openjdk-17-jdk python3-pip libncurses5
+          pip3 install --upgrade pip
+          pip3 install --user cython buildozer
+
+      - name: Add buildozer to PATH
+        run: echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Build debug APK
-        run: |
-          buildozer -v android debug
+        run: buildozer -v android debug
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: notesapp-apk
