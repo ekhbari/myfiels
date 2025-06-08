@@ -1,0 +1,31 @@
+name: Build APK with Buildozer
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      # صورة رسمية لـ Buildozer (تحوي Android SDK/NDK مُجهَّزَين)
+      image: kivy/buildozer:stable
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install extra dependencies
+        run: |
+          apt-get update
+          apt-get install -y zip openjdk-17-jdk
+
+      - name: Build debug APK
+        run: |
+          buildozer -v android debug
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: notesapp-apk
+          path: bin/*.apk
