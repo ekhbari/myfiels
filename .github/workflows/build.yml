@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: kivy/buildozer:stable
+      image: kivy/buildozer:latest  # ← حل المشكلة هنا
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
